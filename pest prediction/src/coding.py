@@ -1,8 +1,25 @@
+import functools
 from flask import *
 from src.dbconnectionnew import *
 
 app = Flask(__name__)
 app.secret_key="1234"
+
+
+def login_required(func):
+    @functools.wraps(func)
+    def secure_function():
+        if "lid" not in session:
+            return render_template('loginindex.html')
+        return func()
+
+    return secure_function
+
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return render_template('loginindex.html')
 
 @app.route('/')
 def login():
@@ -66,16 +83,19 @@ def ag_home():
 
 
 @app.route('/add_crop',methods=['post','get'])
+@login_required
 def add_crop():
     return render_template("Agriculture Officer/Add Crop.html")
 
 
 @app.route('/add_expert',methods=['post','get'])
+@login_required
 def add_expert():
     return render_template("Agriculture Officer/Add Experts.html")
 
 
 @app.route('/add_notification')
+@login_required
 def add_notification():
     qry="SELECT * FROM notification WHERE l_id=%s"
     res=selectall2(qry,session['lid'])
@@ -83,12 +103,14 @@ def add_notification():
 
 
 @app.route('/manage_crop')
+@login_required
 def manage_crop():
     qry="select * from crop"
     res=selectall(qry)
     return render_template("Agriculture Officer/Manage Crop.html",val=res)
 
 @app.route('/delete_crop')
+@login_required
 def delete_crop():
     id=request.args.get('id')
     qry="delete FROM crop WHERE c_id=%s"
@@ -97,6 +119,7 @@ def delete_crop():
 
 
 @app.route('/edit_crop')
+@login_required
 def edit_crop():
     id=request.args.get('id')
     qry="select * FROM crop WHERE c_id=%s"
@@ -105,6 +128,7 @@ def edit_crop():
     return render_template("Agriculture Officer/Edit crop.html",val=res)
 
 @app.route('/update_crop',methods=['post'])
+@login_required
 def update_crop():
     crop=request.form['textfield']
     description=request.form['textfield2']
@@ -118,12 +142,14 @@ def update_crop():
 
 
 @app.route('/manage_expert')
+@login_required
 def manage_expert():
     qry="SELECT * from expert"
     res=selectall(qry)
     return render_template("Agriculture Officer/Manage Expert.html",val=res)
 
 @app.route('/delete_expert')
+@login_required
 def delete_expert():
     id=request.args.get('id')
     qry="delete FROM expert WHERE ex_id=%s"
@@ -131,6 +157,7 @@ def delete_expert():
     return '''<script>alert(" Successfully deleted");window.location='/manage_expert'</script>'''
 
 @app.route('/edit_expert')
+@login_required
 def edit_expert():
     id=request.args.get('id')
     qry="select * FROM expert WHERE ex_id=%s"
@@ -139,6 +166,7 @@ def edit_expert():
     return render_template("Agriculture Officer/Edit expert.html",val=res)
 
 @app.route('/update_expert',methods=['post'])
+@login_required
 def update_expert():
     Fname=request.form['textfield']
     Lname=request.form['textfield2']
@@ -157,10 +185,12 @@ def update_expert():
 
 
 @app.route('/send_notification',methods=['get','post'])
+@login_required
 def send_notification():
     return render_template("Agriculture Officer/Send Notifications.html")
 
 @app.route('/delete_notification')
+@login_required
 def delete_notification():
     id=request.args.get('id')
     qry="delete FROM notification WHERE N_id=%s"
@@ -170,12 +200,14 @@ def delete_notification():
 
 
 @app.route('/verify_farmer')
+@login_required
 def verify_farmer():
     qry="SELECT * FROM `farmer` JOIN `login` ON `login`.`id`=`farmer`.`l_id` "
     res=selectall(qry)
     return render_template("Agriculture Officer/Verify Farmer.html",val=res)
 
 @app.route('/accept_farmer')
+@login_required
 def accept_farmer():
     id = request.args.get('id')
     qry="UPDATE `login` SET `Type`='farmer' WHERE id=%s"
@@ -186,6 +218,7 @@ def accept_farmer():
 
 
 @app.route('/reject_farmer')
+@login_required
 def reject_farmer():
     id = request.args.get('id')
     qry = "UPDATE `login` SET `Type`='reject' WHERE id=%s"
@@ -195,6 +228,7 @@ def reject_farmer():
 
 
 @app.route('/view_feedback')
+@login_required
 def view_feedback():
     qry ="SELECT farmer.First_name,farmer.Last_name,feedback.* FROM farmer JOIN feedback ON farmer.l_id=feedback.l_id"
     res =selectall(qry)
@@ -202,6 +236,7 @@ def view_feedback():
 
 
 @app.route('/view_registered_users')
+@login_required
 def view_registered_users():
     qry = "select * from farmer"
     res = selectall(qry)
@@ -214,16 +249,19 @@ def expert_homepage():
 
 
 @app.route('/add_fertilizer')
+@login_required
 def add_fertilizer():
     return render_template("Expert/Add Fertilizer.html")
 
 
 @app.route('/add_tips')
+@login_required
 def add_tips():
     return render_template("Expert/Add Tips.html")
 
 
 @app.route('/complaints')
+@login_required
 def complaints():
     qry="SELECT farmer.First_name,farmer.Last_name,complaint.* FROM farmer JOIN `complaint` ON farmer.l_id=complaint.F_id WHERE ex_id=%s"
     res=selectall2(qry,session['lid'])
@@ -231,6 +269,7 @@ def complaints():
 
 
 @app.route('/doubt')
+@login_required
 def doubt():
     qry=" SELECT farmer.First_name,farmer.Last_name,doubt.* FROM farmer JOIN doubt ON farmer.l_id=doubt.F_id WHERE ex_id=%s"
     res = selectall2(qry, session['lid'])
@@ -238,12 +277,14 @@ def doubt():
 
 
 @app.route('/manage_fertilizer')
+@login_required
 def manage_fertilizer():
     qry="select * from fertilizer"
     res=selectall(qry)
     return render_template("Expert/Manage Fertilizer.html",val=res)
 
 @app.route('/delete_fertilizer')
+@login_required
 def delete_fertilizer():
     id=request.args.get('id')
     qry="delete FROM fertilizer WHERE Fert_id=%s"
@@ -251,6 +292,7 @@ def delete_fertilizer():
     return '''<script>alert(" Successfully deleted");window.location='/manage_tips#about-us'</script>'''
 
 @app.route('/edit_fertilizer')
+@login_required
 def edit_fertilizer():
     id=request.args.get('id')
     qry="select *   FROM fertilizer WHERE Fert_id=%s"
@@ -261,6 +303,7 @@ def edit_fertilizer():
 
 
 @app.route('/update_Fertilizer',methods=['post'])
+@login_required
 def update_Fertilizer():
     Fertname=request.form['textfield']
     description=request.form['textfield2']
@@ -272,6 +315,7 @@ def update_Fertilizer():
 
 
 @app.route('/manage_tips')
+@login_required
 def manage_tips():
     q="select * from tips"
     v=selectall(q)
@@ -279,6 +323,7 @@ def manage_tips():
 
 
 @app.route('/delete_tip')
+@login_required
 def delete_tip():
     id=request.args.get('id')
     qry="delete FROM tips WHERE Tip_id=%s"
@@ -287,6 +332,7 @@ def delete_tip():
 
 
 @app.route('/notification1')
+@login_required
 def notification1():
     qry="SELECT * from Notification"
     res=selectall(qry)
@@ -299,6 +345,7 @@ def farmer_home():
 
 
 @app.route('/complaints1')
+@login_required
 def complaints1():
     qry="SELECT `complaint`.*,`expert`.`First_name`,`Last_name` FROM `expert` JOIN `complaint` ON `complaint`.`ex_id`=`expert`.`l_id` WHERE `complaint`.`F_id`=%s"
     res=selectall2(qry,session['lid'])
@@ -306,6 +353,7 @@ def complaints1():
 
 
 @app.route('/doubts1')
+@login_required
 def doubts1():
     qry="SELECT `doubt`.*,`expert`.`First_name`,`Last_name` FROM `expert` JOIN `doubt` ON `doubt`.ex_id=`expert`.`l_id` WHERE `doubt`.F_id=%s"
     res=selectall2(qry,session['lid'])
@@ -313,6 +361,7 @@ def doubts1():
 
 
 @app.route('/feedback')
+@login_required
 def feedback():
     qry = "SELECT * from feedback"
     res = selectall(qry)
@@ -321,11 +370,13 @@ def feedback():
 
 
 @app.route('/pest_prediction')
+@login_required
 def pest_prediction():
     return render_template("Farmer/Pest Prediction.html")
 
 
 @app.route('/send_complaints',methods=['post'])
+@login_required
 def send_complaints():
     q="SELECT * FROM `expert`"
     res=selectall(q)
@@ -333,6 +384,7 @@ def send_complaints():
 
 
 @app.route('/send_complaints1',methods=['post'])
+@login_required
 def send_complaints1():
     comp=request.form['textfield2']
     eid=request.form['select']
@@ -344,12 +396,14 @@ def send_complaints1():
 
 
 @app.route('/send_doubts',methods=['post'])
+@login_required
 def send_doubts():
     qry="select * from expert"
     res=selectall(qry)
     return render_template("Farmer/Send Doubts.html",val=res)
 
 @app.route('/send_doubt1',methods=['post'])
+@login_required
 def send_doubt1():
     doubt=request.form['textfield2']
     eid=request.form['select']
@@ -361,10 +415,12 @@ def send_doubt1():
 
 
 @app.route('/send_feedback',methods=['post'])
+@login_required
 def send_feedback():
     return render_template("Farmer/Send Feedback.html")
 
 @app.route('/addfeedback',methods=['get','post'])
+@login_required
 def addfeedback():
     feedback=request.form['textfield']
     qry = "insert into feedback values(null,%s,%s,curdate())"
@@ -378,6 +434,7 @@ def addfeedback():
 
 
 @app.route('/view_crops')
+@login_required
 def view_crops():
     qry="SELECT * from crop"
     res=selectall(qry)
@@ -385,6 +442,7 @@ def view_crops():
 
 
 @app.route('/view_fertilizer')
+@login_required
 def view_fertilizer():
     qry="SELECT * from fertilizer"
     res=selectall(qry)
@@ -392,6 +450,7 @@ def view_fertilizer():
 
 
 @app.route('/view_notification')
+@login_required
 def view_notification():
     qry="SELECT * from notification"
     res=selectall(qry)
@@ -399,6 +458,7 @@ def view_notification():
 
 
 @app.route('/view_tips')
+@login_required
 def view_tips():
     qry="SELECT  expert.First_name,expert.Last_name,tips.* FROM expert JOIN tips ON expert.l_id=tips.ex_id"
     res=selectall(qry)
@@ -407,6 +467,7 @@ def view_tips():
 
 
 @app.route('/expertreg',methods=['get','post'])
+@login_required
 def expertreg():
     fname=request.form['textfield']
     lname=request.form['lname']
@@ -426,6 +487,7 @@ def expertreg():
 
 
 @app.route('/cropmanage',methods=['get','post'])
+@login_required
 def cropmanage():
     cname=request.form['textfield']
     discription=request.form['textfield2']
@@ -435,6 +497,7 @@ def cropmanage():
     return'''<script>alert("Added");window.location='/manage_crop'</script>'''
 
 @app.route('/addnotification1',methods=['get','post'])
+@login_required
 def addnotification1():
     notification=request.form['textfield']
     qry="insert into notification values(null,%s,%s,curdate())"
@@ -444,6 +507,7 @@ def addnotification1():
 
 
 @app.route('/addtips1',methods=['get','post'])
+@login_required
 def addtips1():
     tips=request.form['textfield']
     qry = "insert into tips values(null,%s,%s,curdate())"
@@ -452,10 +516,12 @@ def addtips1():
     return '''<script>alert("Added");window.location='/manage_tips'</script>'''
 
 @app.route('/addtips',methods=['get','post'])
+@login_required
 def addtips():
     return render_template('Expert/Add Tips.html')
 
 @app.route('/addfertilizer1',methods=['get','post'])
+@login_required
 def addfertilizer1():
     fertname=request.form['textfield2']
     description=request.form['textfield']
@@ -466,12 +532,14 @@ def addfertilizer1():
 
 
 @app.route('/reply_to_doubt')
+@login_required
 def reply_to_doubt():
     id=request.args.get('id')
     session['did']=id
     return render_template("Expert/Reply to Doubt.html")
 
 @app.route('/sendreply',methods=['get','post'])
+@login_required
 def sendreply():
     reply=request.form['textfield']
     qry = "UPDATE `doubt` SET Reply=%s WHERE D_id=%s"
@@ -482,12 +550,14 @@ def sendreply():
 
 
 @app.route('/reply_to_complaints')
+@login_required
 def reply_to_complaints():
     id = request.args.get('id')
     session['cid'] = id
     return render_template("Expert/Reply to Complaints.html")
 
 @app.route('/sendreplytocomplaints',methods=['get','post'])
+@login_required
 def sendreplytocomplaints():
     reply=request.form['textfield']
     qry = "UPDATE `complaint` SET Reply=%s WHERE Comp_id=%s"

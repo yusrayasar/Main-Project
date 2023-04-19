@@ -84,7 +84,7 @@ CREATE TABLE `expert` (
   `Age` int(11) DEFAULT NULL,
   `Pin` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`ex_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `expert` */
 
@@ -142,7 +142,7 @@ CREATE TABLE `fertilizer` (
   `Fertilizer name` varchar(200) DEFAULT NULL,
   `Description` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`Fert_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `fertilizer` */
 
@@ -199,7 +199,7 @@ CREATE TABLE `tips` (
   `Tips` varchar(200) DEFAULT NULL,
   `Date` date DEFAULT NULL,
   PRIMARY KEY (`Tip_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 /*Data for the table `tips` */
 
