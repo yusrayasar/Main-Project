@@ -41,37 +41,37 @@
 				<form class="login100-form validate-form" action="register1"  method="post">
 					<div class="wrap-input100 validate-input m-b-26" data-validate=" required">
 						<span class="label-input100">firstname</span>
-						<input class="input100" type="text" name="textfield" placeholder="Enter firstname" required pattern="[A-Z a-z.]{3,25}">
+						<input class="input100" type="text" name="textfield" placeholder="Enter firstname" required pattern="[A-Z a-z.]{3,25}" title="characters allowed">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-26" data-validate="required">
 						<span class="label-input100">lastname</span>
-						<input class="input100" type="text" name="textfield2" placeholder="Enter lastname" required pattern="[A-Z a-z.]{3,25}">
+						<input class="input100" type="text" name="textfield2" placeholder="Enter lastname" required pattern="[A-Z a-z.]{3,25}" title="characters allowed">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-26" data-validate=" required">
 						<span class="label-input100">place</span>
-						<input class="input100" type="text" name="textfield4" placeholder="Enter place" required pattern="[A-Z a-z.]{3,25}">
+						<input class="input100" type="text" name="textfield4" placeholder="Enter place" required pattern="[A-Z a-z.]{3,25}" title="characters allowed">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-26" data-validate=" required">
 						<span class="label-input100">pin</span>
-						<input class="input100" type="text" name="textfield5" placeholder="Enter pin" required pattern="[0-9]{6}">
+						<input class="input100" type="text" name="textfield5" placeholder="Enter pin" required pattern="[0-9]{6}" title="characters not allowed">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-26" data-validate=" required">
 						<span class="label-input100">age</span>
-						<input class="input100" type="text" name="textfield3" placeholder="Enter age" required>
+						<input class="input100" type="text" name="textfield3" placeholder="Enter age" required pattern="[0-9]{2}" title="characters not allowed">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input m-b-26" data-validate="required">
 						<span class="label-input100">phone</span>
-						<input class="input100" type="text" name="textfield6" placeholder="Enter phone" required pattern="[6789][0-9]{9}">
+						<input class="input100" type="text" name="textfield6" placeholder="Enter phone" required pattern="[6789][0-9]{9}" title="please enter a valid phone number" >
 						<span class="focus-input100"></span>
 					</div>
 
@@ -82,7 +82,7 @@
 	</div>
 					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
 						<span class="label-input100">Password</span>
-						<input class="input100" type="password" name="textfield8" placeholder="Enter password" required>
+						<input class="input100" type="password" name="textfield8" placeholder="Enter password" required pattern="[0-9]{6}" title="must contain 6 characters" >
 						<span class="focus-input100"></span>
 					</div>
 
