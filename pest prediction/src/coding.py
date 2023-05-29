@@ -1,6 +1,7 @@
 import functools
 from flask import *
 from src.dbconnectionnew import *
+from src.cnn_pest import *
 
 app = Flask(__name__)
 app.secret_key="1234"
@@ -375,6 +376,52 @@ def pest_prediction():
     return render_template("Farmer/Pest Prediction.html")
 
 
+@app.route('/pest_prediction1',methods=['post'])
+@login_required
+def pest_prediction1():
+    image=request.files['file']
+    image.save(r'C:\Users\hp\PycharmProjects\pest prediction\src\static\1.jpg')
+    result=predict('static/1.jpg')
+
+    print(result)
+    if result[0]==0:
+        res="aphids"
+    elif result[0]==1:
+        res="armyworm"
+    elif result[0]==2:
+        res="beetle"
+    elif result[0]==3:
+        res="bollworm"
+    elif result[0]==4:
+        res="caterpillars"
+    elif result[0]==5:
+        res="leaflets"
+    elif result[0]==6:
+        res="grasshopper"
+    elif result[0]==7:
+        res="mites"
+    elif result[0]==8:
+        res="mosquito"
+    elif result[0]==9:
+        res="sawfly"
+    elif result[0]==10:
+        res="stem_borer"
+    elif result[0]==11:
+        res="dryingofleaflets"
+    elif result[0]==12:
+        res="flaccidity"
+    else:
+        res="yellowing"
+
+    return render_template("Farmer/result.html",val=res)
+
+
+@app.route('/result',methods=['post'])
+def result():
+    return render_template("Farmer/result.html")
+
+
+
 @app.route('/send_complaints',methods=['post'])
 @login_required
 def send_complaints():
@@ -571,4 +618,4 @@ def sendreplytocomplaints():
 
 
 
-app.run(debug=True)
+app.run(debug=True, port=1234 )

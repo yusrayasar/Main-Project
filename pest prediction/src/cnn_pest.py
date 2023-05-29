@@ -19,10 +19,11 @@ import numpy as np
 #------------------------------
 # sess = tf.Session()
 # keras.backend.set_session(sess)
+
 #------------------------------
 #variables
-num_classes =9
-batch_size = 40
+num_classes =14
+batch_size = 256
 epochs = 50
 #------------------------------
 
@@ -56,6 +57,7 @@ def read_dataset(path):
         for root, dirs, files in os.walk(r'C:\Users\hp\Downloads\dataset\archive\pest\train\\' + pa):
 
          for f in files:
+
             file_path = os.path.join(r'C:\Users\hp\Downloads\dataset\archive\pest\train\\'+pa, f)
             img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
             res = cv2.resize(img, (48, 48), interpolation=cv2.INTER_CUBIC)
@@ -145,29 +147,32 @@ def read_dataset1(path):
 # # ------------------------------
 #
 # model.compile(loss='categorical_crossentropy'
-#               , optimizer=keras.optimizers.Adam()
+#               , optimizer=keras.optimizers.SGD()
 #               , metrics=['accuracy']
 #               )
 #
 # # ------------------------------
 #
-# if not os.path.exists("model1.h5"):
+# if not os.path.exists("model2.h5"):
+#
 #
 #     model.fit_generator(train_generator, steps_per_epoch=batch_size, epochs=epochs)
-#     model.save("model1.h5")  # train for randomly selected one
+#     model.save("model2.h5")  # train for randomly selected one
 # else:
-#     model = load_model("model1.h5")  # load weights
+#     model = load_model("model2.h5")  # load weights
 # from sklearn.metrics import confusion_matrix
 # yp=model.predict_classes(x_test,verbose=0)
 # cf=confusion_matrix(y_test,yp)
 # print(cf)
+# my_list = os.listdir(r'C:\Users\hp\Downloads\dataset\archive\pest\train')
+# print(my_list)
 def predict(fn):
     dataset=read_dataset1(fn)
     (mnist_row, mnist_col, mnist_color) = 48, 48, 1
 
     dataset = dataset.reshape(dataset.shape[0], mnist_row, mnist_col, mnist_color)
     dataset=dataset/255
-    mo = load_model("model1.h5")
+    mo = load_model("model2.h5")
 
     # predict probabilities for test set
 
@@ -176,4 +181,4 @@ def predict(fn):
 #
 #     print(yhat_classes)
 
-print(predict(r"C:\Users\hp\Downloads\dataset\archive\pest\train\sawfly\jpg_9 - Copy (3).jpg"))
+# print(predict(r"C:\Users\hp\PycharmProjects\pest prediction\jpg_8.jpg"))
